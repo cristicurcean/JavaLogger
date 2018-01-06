@@ -1,11 +1,9 @@
 import logger.io.LogsReader;
-import logger.model.Log;
 import logger.model.LogType;
 
 import java.io.IOException;
-import java.util.*;
-
-import static logger.model.LogType.SEVER;
+import java.util.List;
+import java.util.Scanner;
 
 public class UI {
 
@@ -35,23 +33,19 @@ public class UI {
                 System.out.println("Bitte den Typ der Error wahlen :");
                 System.out.println("INFO, ERROR, DEBUG, SEVER, WARN, CONFIG, FINE, FINER, FATAL");
                 String logType = scanner.next();
-                List<String> logs  = logsReader.getByType(LogType.valueOf(logType));
-                System.out.println(String.join("\n",logs));
+                List<String> logs = logsReader.getByType(LogType.valueOf(logType));
+                System.out.println(String.join("\n", logs));
 
-            }
-            else if (opt == 2) {
-                List<String> logs  = logsReader.getByType(LogType.SEVER);
-                System.out.println(String.join("\n",logs));
+            } else if (opt == 2) {
+                List<String> logs = logsReader.getByType(LogType.SEVER);
+                System.out.println(String.join("\n", logs));
 
-            }
-            else if (opt == 3) {
-                Date date = new Date();
-                Map<LogType, List<Log>> map = logsReader.getLogMap();
-                map.entrySet().stream().filter(log -> log.getValue().);
-
-
+            } else if (opt == 3) {
+                List<String> logs = logsReader.getLogsByDay(10);
+                System.out.println(String.join("\n", logs));
 
             }
         }
 
     }
+}

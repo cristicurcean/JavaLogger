@@ -66,8 +66,12 @@ public class LogsReader {
     }
 
     public List<String> getLogsByDay(long days){
-        logMap.values().stream().forEach(logs -> logs.stream().filter(log -> dateDiffInDays(log.getDate(), new Date()) <= days).map(Log::getLogAsString).collect(Collectors.toList()));
-    
+        List<String> logs = new ArrayList<>();
+        Date now = new Date();
+
+        logMap.keySet().forEach(k -> logMap.get(k).stream().filter(log -> dateDiffInDays(log.getDate(), now) <= days).forEach(l -> logs.add(l.getLogAsString())));
+
+        return logs;
     }
 
     public static long dateDiffInDays(Date d1, Date d2){
