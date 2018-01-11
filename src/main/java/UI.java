@@ -37,8 +37,8 @@ public class UI {
                 System.out.println(String.join("\n", logs));
 
             } else if (opt == 2) {
-                List<String> logs = logsReader.getByType(LogType.SEVER);
-                System.out.println(String.join("\n", logs));
+                String log = logsReader.getMostCommenErrorByeType(LogType.SEVER);
+                System.out.println(log);
 
             } else if (opt == 3) {
                 List<String> logs = logsReader.getLogsByDay(10);

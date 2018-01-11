@@ -1,5 +1,6 @@
 package logger.io;
 
+import com.sun.prism.impl.Disposer;
 import logger.model.Log;
 import logger.model.LogType;
 import java.io.IOException;
@@ -49,7 +50,6 @@ public class LogsReader {
                     if (logMap.containsKey(log.getLogType())){
                         logs.addAll(logMap.get(log.getLogType()));
                     }
-
                     logs.add(log);
                     logMap.put(log.getLogType(), logs);
                 } catch (ParseException e) {
@@ -60,26 +60,40 @@ public class LogsReader {
         });
     }
 
+    /**
+     * @param type TYPE DER Error den wir wollen
+     * @return
+     */
     public List<String> getByType(LogType type){
         return logMap.get(type).stream().map(Log::getLogAsString).collect(Collectors.toList());
 
     }
 
+    /**findet logst die in der letzten gegeben tage gegebe wurde
+     * @param days wir geben die diferentz zw den tagen
+     * @return Alle logs die in der letzten gegeben tage
+     */
     public List<String> getLogsByDay(long days){
         List<String> logs = new ArrayList<>();
         Date now = new Date();
-
         logMap.keySet().forEach(k -> logMap.get(k).stream().filter(log -> dateDiffInDays(log.getDate(), now) <= days).forEach(l -> logs.add(l.getLogAsString())));
 
         return logs;
     }
 
+    /**Die funktion gibt die different von 2 daten
+     * @param d1 Date 1
+     * @param d2 Date 2
+     * @return
+     */
     public static long dateDiffInDays(Date d1, Date d2){
         long dif = d2.getTime() - d1.getTime();
         return  dif / (24 * 60 * 60 * 1000);
-
     }
-
+    public String getMostCommenErrorByeType(LogType type){
+        Comparator<Log> messageComparator = (m1, m2) -> m1.getMessage().compareTo(m2.getMessage());
+        return logMap.get(type).stream().max(Comparator.comparing(Log::getMessage)).get().getLogAsString();
+    }
 
 
 
