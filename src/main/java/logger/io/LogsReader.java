@@ -1,8 +1,8 @@
 package logger.io;
 
-import com.sun.prism.impl.Disposer;
 import logger.model.Log;
 import logger.model.LogType;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -90,11 +90,17 @@ public class LogsReader {
         long dif = d2.getTime() - d1.getTime();
         return  dif / (24 * 60 * 60 * 1000);
     }
-    public String getMostCommenErrorByeType(LogType type){
-        Comparator<Log> messageComparator = (m1, m2) -> m1.getMessage().compareTo(m2.getMessage());
-        return logMap.get(type).stream().max(Comparator.comparing(Log::getMessage)).get().getLogAsString();
+    public String getMostCommentErrorByeType(LogType type){
+        Map<String, Long> map = logMap
+                .get(type)
+                .stream()
+                .collect(Collectors.groupingBy(Log::getMessage, Collectors.counting()))
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+
+        return map.keySet().iterator().next();
     }
-
-
-
 }

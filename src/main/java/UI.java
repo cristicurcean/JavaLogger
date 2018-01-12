@@ -37,7 +37,7 @@ public class UI {
                 System.out.println(String.join("\n", logs));
 
             } else if (opt == 2) {
-                String log = logsReader.getMostCommenErrorByeType(LogType.SEVER);
+                String log = logsReader.getMostCommentErrorByeType(LogType.SEVER);
                 System.out.println(log);
 
             } else if (opt == 3) {
